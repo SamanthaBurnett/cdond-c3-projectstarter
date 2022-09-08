@@ -153,12 +153,24 @@ jobs:
           command: |
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> inventory.txt
+              --output text >> ~/.circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment      
+      - destroy-environment 
+
+  print_inventory_file:
+    docker:
+      - image: alpine:latest
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["b5:dd:25:4e:34:ae:d3:01:b9:17:92:a5:64:85:6a:df"]
+      - attach_workspace:
+          at: ~/
+      - run: 
+          command: cat ~/.circleci/ansible/inventory.txt     
 
   configure-infrastructure:
     docker:
@@ -311,8 +323,10 @@ workflows:
           # filters:
           #   branches:
           #     only: [test-feature-branch]
-      - configure-infrastructure:
+      - print_inventory_file:
           requires: [deploy-infrastructure]
+      # - configure-infrastructure:
+      #     requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
