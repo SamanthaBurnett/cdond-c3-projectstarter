@@ -210,6 +210,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run:
+          name: Install dependencies - aws cli
+          command: |
+            yum install -y tar gzip
       - attach_workspace:
           at: ~/
       - run:
@@ -227,10 +231,6 @@ jobs:
             cd frontend
             npm install
             npm run build
-      - run:
-          name: Install dependencies - aws cli
-          command: |
-            yum install -y tar gzip
       - run:
           name: Get backend url
           command: |
