@@ -217,11 +217,13 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install dependencies - npm
+          name: Install dependencies
           command: |
-            cd frontend
-            npm install
-            npm run build
+            yum install -y unzip 
+            apt-get update && sudo apt-get install -yy less
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update 
       - run:
           name: Get backend url
           command: |
