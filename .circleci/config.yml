@@ -211,20 +211,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install dependencies - aws cli
+          name: Install dependencies - tar
           command: |
             yum install -y tar gzip
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install dependencies - python
-          command: |
-            sudo yum update
-            sudo dnf install python3
-      - run:
-          name: Install dependencies - ansible
-          command: |
-            apk add --update ansible
       - run:
           name: Install dependencies - npm
           command: |
